@@ -5,10 +5,13 @@ local player = {
 	velocity_y = 0,
 	gravity = 500,
 	jump_strength = 250,
+	shoot = signal("position", "direction"),
 }
 function player:_ready()
 	reload_timer = self:get_node("ReloadTimer")
 end
+
+
 
 player.get_input = function(self, delta)
 -- // movement
@@ -24,7 +27,9 @@ player.get_input = function(self, delta)
 
 -- // shooting
 	if Input:is_action_just_pressed("shoot") and reload_timer.time_left == 0 then
-		print("what the heck")
+		self.shoot:emit(self.position, self:get_local_mouse_position():normalized())
+		-- // local mouse position is relative to self (player)
+		-- // normalized makes it 1/-1 so that bullet speed is always the same regardless of distance clicked from player
 		reload_timer:start()
 	end
 -- // shooting
@@ -37,7 +42,7 @@ end
 function player:_physics_process(delta)
 	self:get_input(delta)
 	self.velocity = Vector2(self.direction * self.speed, self.velocity_y)
-	-- // can not manipulate self.velocity.x/y directly; can't set them to any value by referencing as 
+	-- // can not manipulate self.velocity.x/y directly; can't set them to any value by referencing as
 	-- // self.velocity.y = [value]; have to do from self.velocity itself
 	self:move_and_slide()
 end
