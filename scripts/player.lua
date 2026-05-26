@@ -1,6 +1,6 @@
 local player = {
 	extends = CharacterBody2D,
-	direction = Vector2,
+	direction = Vector2.ZERO,
 	speed = 100,
 	velocity_y = 0,
 	gravity = 500,
@@ -45,6 +45,18 @@ function player:_physics_process(delta)
 	-- // can not manipulate self.velocity.x/y directly; can't set them to any value by referencing as
 	-- // self.velocity.y = [value]; have to do from self.velocity itself
 	self:move_and_slide()
+	self:animation()
+end
+
+function player:animation()
+	local AnimationPlayer = self:get_node("AnimationPlayer")
+	local LegsSprite2D = self:get_node("LegsSprite2D")
+	LegsSprite2D.flip_h = self.velocity.x < 0 and true or false
+	if self:is_on_floor() then
+		AnimationPlayer.current_animation = self.velocity.x ~= 0 and 'run' or 'idle'
+	else
+		AnimationPlayer.current_animation = 'jump'
+	end
 end
 
 return player
