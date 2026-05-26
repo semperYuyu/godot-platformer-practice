@@ -28,6 +28,9 @@ player.get_input = function(self, delta)
 		reload_timer:start()
 	end
 -- // shooting
+
+-- // in video, you're on the Bullet section at 4:57:17
+-- // remember to delete this comment, and to make branches !
 end
 
 
