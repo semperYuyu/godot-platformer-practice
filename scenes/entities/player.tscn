@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pbmoqjvodepq"]
 
-[ext_resource type="Script" uid="uid://bia126oxqowhw" path="res://scripts/player.lua" id="1_ucweq"]
+[ext_resource type="Script" uid="uid://dnabm1pcvd4dl" path="res://scripts/player.lua" id="1_ucweq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u8vuu"]
 

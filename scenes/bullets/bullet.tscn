@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b1oy5gaoemhos"]
+
+[ext_resource type="Script" uid="uid://b6g4hmnj4ka40" path="res://scripts/bullet.lua" id="1_byxw7"]
+[ext_resource type="Texture2D" uid="uid://nss02ym145bd" path="res://graphics/fire/default.png" id="1_ma0cl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5f1na"]
+radius = 2.0
+
+[node name="Bullet" type="Area2D" unique_id=1943202630]
+script = ExtResource("1_byxw7")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=264160646]
+texture = ExtResource("1_ma0cl")
+
+[node name="DespawnTimer" type="Timer" parent="." unique_id=2050084751]
+one_shot = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1096281614]
+shape = SubResource("CircleShape2D_5f1na")
+
+[connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]
