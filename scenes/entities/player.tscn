@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://pbmoqjvodepq"]
+
+[ext_resource type="Script" uid="uid://bia126oxqowhw" path="res://scripts/player.lua" id="1_ucweq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u8vuu"]
+
+[node name="Player" type="CharacterBody2D" unique_id=1157744452]
+script = ExtResource("1_ucweq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1277308866]
+shape = SubResource("CapsuleShape2D_u8vuu")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=772832187]
+zoom = Vector2(3, 3)
+
+[node name="ReloadTimer" type="Timer" parent="." unique_id=1705849194]
+wait_time = 0.5
+one_shot = true
