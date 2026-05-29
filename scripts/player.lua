@@ -27,17 +27,25 @@ player.get_input = function(self, delta)
 
 -- // shooting
 	if Input:is_action_just_pressed("shoot") and reload_timer.time_left == 0 then
+		local MarkerSprite2D = self:get_node("MarkerSprite2D")
 		self.shoot:emit(self.position, self:get_local_mouse_position():normalized())
 		-- // local mouse position is relative to self (player)
 		-- // normalized makes it 1/-1 so that bullet speed is always the same regardless of distance clicked from player
 		reload_timer:start()
+		local tween = self:get_tree():create_tween()
+
+		tween:tween_property(MarkerSprite2D, "scale", Vector2(0.05, 0.05), 0.1)
+		tween:tween_property(MarkerSprite2D, "scale", Vector2(0.5, 0.5), 0.4)
+
 	end
 -- // shooting
 
--- // in video, you're on the Bullet section at 4:57:17
--- // remember to delete this comment, and to make branches !
 end
 
+player.update_marker = function(self)
+	local MarkerSprite2D = self:get_node("MarkerSprite2D")
+	MarkerSprite2D.position = self:get_local_mouse_position():normalized() * 40
+end
 
 function player:_physics_process(delta)
 	self:get_input(delta)
@@ -46,6 +54,7 @@ function player:_physics_process(delta)
 	-- // self.velocity.y = [value]; have to do from self.velocity itself
 	self:move_and_slide()
 	self:animation()
+	self:update_marker()
 end
 
 function player:animation()
