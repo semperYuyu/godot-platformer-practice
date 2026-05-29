@@ -8,6 +8,12 @@ local bullet = {
 	end,
 }
 
+function bullet:_ready()
+	local scale_tween = self:get_tree():create_tween()
+
+	scale_tween:tween_property(self, "scale", Vector2(1, 1), 0.2):from(Vector2.ZERO)
+end
+
 function bullet:_physics_process(delta)
 	self.position = self.position + (self.direction * self.speed * delta)
 end
