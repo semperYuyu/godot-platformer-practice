@@ -51,12 +51,33 @@ end
 function player:animation()
 	local AnimationPlayer = self:get_node("AnimationPlayer")
 	local LegsSprite2D = self:get_node("LegsSprite2D")
+
 	LegsSprite2D.flip_h = self.velocity.x < 0 and true or false
 	if self:is_on_floor() then
 		AnimationPlayer.current_animation = self.velocity.x ~= 0 and 'run' or 'idle'
 	else
 		AnimationPlayer.current_animation = 'jump'
 	end
+
+	-- // --
+		local TorsoSprite2D = self:get_node("TorsoSprite2D")
+		local mouse_pos = self:get_local_mouse_position():normalized()
+		local adjusted_mouse_pos = Vector2i(round(mouse_pos.x), round(mouse_pos.y))
+		local key = adjusted_mouse_pos.x .. "," .. adjusted_mouse_pos.y
+		-- i can't set a Vector2 object as a key... so i have to turn the data into a string to search in dictionary
+		gun_directions = {
+		["1,0"] = 0,
+		["1,1"] = 1,
+		["0,1"] = 2,
+		["-1,1"] = 3,
+		["-1,0"] = 4,
+		["-1,-1"] = 5,
+		["0,-1"] = 6,
+		["1,-1"] = 7,
+	}
+
+		TorsoSprite2D.frame = gun_directions[key]
+	-- // --
 end
 
 return player
