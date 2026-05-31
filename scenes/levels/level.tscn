@@ -24,7 +24,7 @@ texture = ExtResource("2_b2cq8")
 [node name="Entities" type="Node2D" parent="." unique_id=488536332]
 
 [node name="Player" parent="Entities" unique_id=1157744452 instance=ExtResource("1_377w7")]
-position = Vector2(144, 209)
+position = Vector2(446, 202)
 
 [node name="Bullets" type="Node2D" parent="." unique_id=466386702]
 
