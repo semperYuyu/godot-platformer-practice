@@ -17,9 +17,9 @@ player.get_input = function(self, delta)
 -- // movement
 	self.direction = Input:get_axis("left", "right")
 	-- // get_axis returns a float rather than a Vector2 object, has to be turned into one to manipulate velocity
-	if Input:is_action_just_pressed("jump") then
+	if Input:is_action_just_pressed("jump") and self:is_on_floor() then
 		self.velocity_y = -self.jump_strength
-	else
+	elseif not self:is_on_floor() then
 		self.velocity_y = self.velocity_y + self.gravity * delta
 	end
 -- // movement

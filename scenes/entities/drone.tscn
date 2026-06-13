@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://veatrg2ycs0q"]
+
+[ext_resource type="Script" uid="uid://dno701d6mbr6p" path="res://scripts/drone.lua" id="1_d5du7"]
+[ext_resource type="Texture2D" uid="uid://vyr0ks75oxum" path="res://graphics/characters/drone.png" id="1_uvgqj"]
+[ext_resource type="Texture2D" uid="uid://bav7n447bnsa5" path="res://graphics/fire/explosion.png" id="3_xcp44"]
+
+[sub_resource type="Animation" id="Animation_d5du7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DroneSprite/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_puw62"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DroneSprite/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_30i2v"]
+_data = {
+&"RESET": SubResource("Animation_d5du7"),
+&"idle": SubResource("Animation_puw62")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uvgqj"]
+radius = 80.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d5du7"]
+radius = 16.03122
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_puw62"]
+
+[sub_resource type="Animation" id="Animation_0tq5o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_6vf5s"]
+resource_name = "default"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_in55t"]
+_data = {
+&"RESET": SubResource("Animation_0tq5o"),
+&"default": SubResource("Animation_6vf5s")
+}
+
+[node name="Drone" type="CharacterBody2D" unique_id=445519087 groups=["Drones"]]
+collision_layer = 4
+script = ExtResource("1_d5du7")
+
+[node name="DroneSprite" type="Node2D" parent="." unique_id=37521365]
+
+[node name="Sprite2D" type="Sprite2D" parent="DroneSprite" unique_id=1626177130]
+texture = ExtResource("1_uvgqj")
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DroneSprite" unique_id=265304033]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_30i2v")
+autoplay = &"idle"
+
+[node name="DetectArea" type="Area2D" parent="." unique_id=1961249868]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=957931718]
+shape = SubResource("CircleShape2D_uvgqj")
+
+[node name="DroneHurtbox" type="Area2D" parent="." unique_id=474094066]
+collision_layer = 4
+collision_mask = 11
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DroneHurtbox" unique_id=700161630]
+shape = SubResource("CircleShape2D_d5du7")
+debug_color = Color(0.9883967, 0, 0.30764377, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=545086269]
+shape = SubResource("CircleShape2D_puw62")
+debug_color = Color(0.6021205, 0.542974, 1.92523e-07, 0.41960785)
+
+[node name="DespawnTimer" type="Timer" parent="." unique_id=1473688657]
+wait_time = 0.8
+one_shot = true
+
+[node name="ExplosionSprite" type="Node2D" parent="." unique_id=2118421053]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ExplosionSprite" unique_id=502196223]
+texture = ExtResource("3_xcp44")
+hframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ExplosionSprite" unique_id=1022225666]
+root_node = NodePath("../Sprite2D")
+libraries/ = SubResource("AnimationLibrary_in55t")
+
+[connection signal="body_entered" from="DetectArea" to="." method="_on_detect_area_body_entered"]
+[connection signal="area_entered" from="DroneHurtbox" to="." method="_on_drone_hurtbox_area_entered"]
+[connection signal="body_entered" from="DroneHurtbox" to="." method="_on_drone_hurtbox_body_entered"]
+[connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]
+[connection signal="animation_finished" from="ExplosionSprite/AnimationPlayer" to="." method="_on_explosion_sprite_animation_player_animation_finished"]

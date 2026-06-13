@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c3ja4xllola45" path="res://scripts/level.lua" id="1_bovvr"]
 [ext_resource type="Texture2D" uid="uid://c7v0ifpdabs2i" path="res://graphics/tilesets/subway.png" id="3_b2cq8"]
 [ext_resource type="Texture2D" uid="uid://cgh7234wked4l" path="res://graphics/tilesets/walls.png" id="3_xb4v1"]
+[ext_resource type="PackedScene" uid="uid://veatrg2ycs0q" path="res://scenes/entities/drone.tscn" id="5_urvlt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urvlt"]
 texture = ExtResource("3_b2cq8")
@@ -2758,6 +2759,14 @@ tile_set = SubResource("TileSet_7pb6i")
 
 [node name="Player" parent="Entities" unique_id=1157744452 instance=ExtResource("1_377w7")]
 position = Vector2(446, 202)
+
+[node name="Drones" type="Node2D" parent="Entities" unique_id=285377512]
+
+[node name="Drone" parent="Entities/Drones" unique_id=445519087 instance=ExtResource("5_urvlt")]
+position = Vector2(341, 124)
+
+[node name="Drone2" parent="Entities/Drones" unique_id=1568605878 instance=ExtResource("5_urvlt")]
+position = Vector2(588, 154)
 
 [node name="Bullets" type="Node2D" parent="." unique_id=466386702]
 

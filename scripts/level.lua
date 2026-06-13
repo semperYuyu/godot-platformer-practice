@@ -4,6 +4,7 @@ local level = {
 
 function level:_ready()
 	bullet_scene = ResourceLoader:load("res://scenes/bullets/bullet.tscn")
+	print(self:get_tree():get_nodes_in_group("Drones"))
 end
 
 function level:_on_player_shoot(position, direction)
