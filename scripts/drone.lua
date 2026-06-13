@@ -9,12 +9,23 @@ local drone = {
 
 
 drone.explode = function (self)
+	if self.death then return end
 	self.death = true
 	self:get_node("DroneSprite"):hide()
-	self:get_node("DetectArea"):queue_free()
 	self:get_node("ExplosionSprite"):show()
   self:get_node("ExplosionSprite/AnimationPlayer"):play('default')
 	self:get_node("DespawnTimer"):start()
+	local drones = self:get_tree():get_nodes_in_group("Drones")
+
+	for i = 0, drones:size() - 1 do
+		local current_drone = drones[i]
+		print(self.position:distance_to(current_drone.position))
+		if self.position:distance_to(current_drone.position) < 96.1 then
+			current_drone:explode()
+		end
+	end
+
+
 end
 
 
@@ -24,7 +35,6 @@ function drone:_ready()
 	DroneSprite = self:get_node("./DroneSprite")
 
 end
-
 
 function drone:_physics_process(deltaTime)
 	if self.playerDetected and not self.death then
@@ -37,11 +47,15 @@ function drone:_physics_process(deltaTime)
 end
 
 
-function drone:_on_detect_area_body_entered()
-	print('hoooooly heck')
-	self.playerDetected = true
-	DetectArea:queue_free()
+function drone:_on_detect_area_body_entered(body)
+	local detect_area = self:get_node("DetectArea")
+	if body:get_name() == "Player" then
+		self.playerDetected = true
+		detect_area:queue_free()
+	end
+
 end
+
 
 function drone:_on_drone_hurtbox_body_entered(player)
 	-- detects player

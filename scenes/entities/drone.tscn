@@ -88,6 +88,8 @@ _data = {
 [node name="Drone" type="CharacterBody2D" unique_id=445519087 groups=["Drones"]]
 collision_layer = 4
 script = ExtResource("1_d5du7")
+metadata/_edit_vertical_guides_ = [80.0]
+metadata/_edit_horizontal_guides_ = [0.0]
 
 [node name="DroneSprite" type="Node2D" parent="." unique_id=37521365]
 
@@ -102,14 +104,14 @@ autoplay = &"idle"
 
 [node name="DetectArea" type="Area2D" parent="." unique_id=1961249868]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=957931718]
 shape = SubResource("CircleShape2D_uvgqj")
 
 [node name="DroneHurtbox" type="Area2D" parent="." unique_id=474094066]
 collision_layer = 4
-collision_mask = 11
+collision_mask = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DroneHurtbox" unique_id=700161630]
 shape = SubResource("CircleShape2D_d5du7")
@@ -135,6 +137,7 @@ root_node = NodePath("../Sprite2D")
 libraries/ = SubResource("AnimationLibrary_in55t")
 
 [connection signal="body_entered" from="DetectArea" to="." method="_on_detect_area_body_entered"]
+[connection signal="body_exited" from="DetectArea" to="." method="_on_detect_area_body_exited"]
 [connection signal="area_entered" from="DroneHurtbox" to="." method="_on_drone_hurtbox_area_entered"]
 [connection signal="body_entered" from="DroneHurtbox" to="." method="_on_drone_hurtbox_body_entered"]
 [connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]
