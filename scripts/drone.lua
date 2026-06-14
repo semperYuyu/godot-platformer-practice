@@ -10,10 +10,17 @@ local drone = {
 
 drone.explode = function (self)
 	if self.death then return end
+
 	self.death = true
+
+	local explosion_sound_player = self:get_node("ExplosionSoundPlayer")
+	local explosion_sound_file = ResourceLoader:load("res://audio/explosion.wav")
+	explosion_sound_player.stream = explosion_sound_file
 	self:get_node("DroneSprite"):hide()
 	self:get_node("ExplosionSprite"):show()
   self:get_node("ExplosionSprite/AnimationPlayer"):play('default')
+	explosion_sound_player:play()
+
 	self:get_node("DespawnTimer"):start()
 	local drones = self:get_tree():get_nodes_in_group("Drones")
 
@@ -32,7 +39,6 @@ end
 function drone:_ready()
 	print('ready !!!')
 	Player = self:get_node("/root/Level/Entities/Player")
-	DroneSprite = self:get_node("./DroneSprite")
 
 end
 
@@ -70,12 +76,16 @@ function drone:_on_drone_hurtbox_area_entered(bullet)
 	-- detects bullet
 	print("owieee")
 	self.health = self.health - 1
-	ModulateTween = self:get_tree():create_tween()
-	ModulateTween:tween_property(self, "modulate", Color(1, 1, 1, 1), 0.2):from(Color(1, 0, 0, 0.7))
 
 	if self.health <= 0 then
 		self:explode()
 	end
+	local drone_sprite = self:get_node("DroneSprite/Sprite2D")
+	local tween = self:create_tween()
+
+	tween:tween_property(drone_sprite.material, 'shader_parameter/Progress', 0.0, 0.3)
+	tween:tween_property(drone_sprite.material, 'shader_parameter/Progress', 1.0, 0.5)
+	-- drone_sprite.material:set_shader_parameter("Progress", 0.0)
 end
 
 function drone:_on_despawn_timer_timeout()

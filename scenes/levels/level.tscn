@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c7v0ifpdabs2i" path="res://graphics/tilesets/subway.png" id="3_b2cq8"]
 [ext_resource type="Texture2D" uid="uid://cgh7234wked4l" path="res://graphics/tilesets/walls.png" id="3_xb4v1"]
 [ext_resource type="PackedScene" uid="uid://veatrg2ycs0q" path="res://scenes/entities/drone.tscn" id="5_urvlt"]
+[ext_resource type="Texture2D" uid="uid://6j2he24a4uda" path="res://graphics/lights/l3.png" id="6_d4w6o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urvlt"]
 texture = ExtResource("3_b2cq8")
@@ -2733,6 +2734,13 @@ texture = ExtResource("3_b2cq8")
 [sub_resource type="TileSet" id="TileSet_7pb6i"]
 sources/0 = SubResource("TileSetAtlasSource_rmjfq")
 
+[sub_resource type="Gradient" id="Gradient_urvlt"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d4w6o"]
+gradient = SubResource("Gradient_urvlt")
+fill_from = Vector2(0.46242774, 0)
+fill_to = Vector2(1, 0.1300578)
+
 [node name="Level" type="Node2D" unique_id=324925073]
 script = ExtResource("1_bovvr")
 
@@ -2763,20 +2771,21 @@ position = Vector2(446, 202)
 [node name="Drones" type="Node2D" parent="Entities" unique_id=285377512]
 
 [node name="Drone" parent="Entities/Drones" unique_id=445519087 instance=ExtResource("5_urvlt")]
-position = Vector2(602, 170)
-
-[node name="Drone2" parent="Entities/Drones" unique_id=1568605878 instance=ExtResource("5_urvlt")]
-position = Vector2(538, 109)
-
-[node name="Drone3" parent="Entities/Drones" unique_id=1061057818 instance=ExtResource("5_urvlt")]
-position = Vector2(456, 64)
-
-[node name="Drone4" parent="Entities/Drones" unique_id=1473538452 instance=ExtResource("5_urvlt")]
-position = Vector2(366, 70)
-
-[node name="Drone5" parent="Entities/Drones" unique_id=1578140068 instance=ExtResource("5_urvlt")]
-position = Vector2(292, 122)
+position = Vector2(567, 138)
 
 [node name="Bullets" type="Node2D" parent="." unique_id=466386702]
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=919421292]
+color = Color(0.38422894, 0.384229, 0.38422883, 1)
+blend_mode = 2
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=146423787]
+position = Vector2(800.5625, 183.875)
+scale = Vector2(2.080078, 2.2539063)
+texture = SubResource("GradientTexture2D_d4w6o")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=855731309]
+position = Vector2(335, 184)
+texture = ExtResource("6_d4w6o")
 
 [connection signal="shoot" from="Entities/Player" to="." method="_on_player_shoot"]

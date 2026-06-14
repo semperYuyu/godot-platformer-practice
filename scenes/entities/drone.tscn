@@ -2,7 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dno701d6mbr6p" path="res://scripts/drone.lua" id="1_d5du7"]
 [ext_resource type="Texture2D" uid="uid://vyr0ks75oxum" path="res://graphics/characters/drone.png" id="1_uvgqj"]
+[ext_resource type="Shader" uid="uid://bgy7ndx4q4x2m" path="res://shaders/drone.tres" id="2_6vf5s"]
 [ext_resource type="Texture2D" uid="uid://bav7n447bnsa5" path="res://graphics/fire/explosion.png" id="3_xcp44"]
+[ext_resource type="Texture2D" uid="uid://dijla4pisrrw8" path="res://graphics/lights/main.png" id="4_0tq5o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_in55t"]
+shader = ExtResource("2_6vf5s")
+shader_parameter/ColorParameter = Color(1, 1, 1, 1)
+shader_parameter/Progress = 1.0
 
 [sub_resource type="Animation" id="Animation_d5du7"]
 length = 0.001
@@ -85,6 +92,43 @@ _data = {
 &"default": SubResource("Animation_6vf5s")
 }
 
+[sub_resource type="Animation" id="Animation_in55t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_lvif6"]
+resource_name = "default"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 5.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h0gm0"]
+_data = {
+&"RESET": SubResource("Animation_in55t"),
+&"default": SubResource("Animation_lvif6")
+}
+
 [node name="Drone" type="CharacterBody2D" unique_id=445519087 groups=["Drones"]]
 collision_layer = 4
 script = ExtResource("1_d5du7")
@@ -94,6 +138,7 @@ metadata/_edit_horizontal_guides_ = [0.0]
 [node name="DroneSprite" type="Node2D" parent="." unique_id=37521365]
 
 [node name="Sprite2D" type="Sprite2D" parent="DroneSprite" unique_id=1626177130]
+material = SubResource("ShaderMaterial_in55t")
 texture = ExtResource("1_uvgqj")
 hframes = 4
 
@@ -103,6 +148,7 @@ libraries/ = SubResource("AnimationLibrary_30i2v")
 autoplay = &"idle"
 
 [node name="DetectArea" type="Area2D" parent="." unique_id=1961249868]
+visible = false
 collision_layer = 0
 collision_mask = 6
 
@@ -110,6 +156,7 @@ collision_mask = 6
 shape = SubResource("CircleShape2D_uvgqj")
 
 [node name="DroneHurtbox" type="Area2D" parent="." unique_id=474094066]
+visible = false
 collision_layer = 4
 collision_mask = 10
 
@@ -118,6 +165,7 @@ shape = SubResource("CircleShape2D_d5du7")
 debug_color = Color(0.9883967, 0, 0.30764377, 0.41960785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=545086269]
+visible = false
 shape = SubResource("CircleShape2D_puw62")
 debug_color = Color(0.6021205, 0.542974, 1.92523e-07, 0.41960785)
 
@@ -135,6 +183,19 @@ hframes = 8
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ExplosionSprite" unique_id=1022225666]
 root_node = NodePath("../Sprite2D")
 libraries/ = SubResource("AnimationLibrary_in55t")
+
+[node name="DroneStrobeLight" type="PointLight2D" parent="." unique_id=1228043141]
+position = Vector2(-3, 2)
+color = Color(0.8181224, 0, 0.13982034, 1)
+texture = ExtResource("4_0tq5o")
+texture_scale = 0.1
+
+[node name="DroneStrobeLightAnimator" type="AnimationPlayer" parent="." unique_id=1419765218]
+root_node = NodePath("../DroneStrobeLight")
+libraries/ = SubResource("AnimationLibrary_h0gm0")
+autoplay = &"default"
+
+[node name="ExplosionSoundPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1388637622]
 
 [connection signal="body_entered" from="DetectArea" to="." method="_on_detect_area_body_entered"]
 [connection signal="body_exited" from="DetectArea" to="." method="_on_detect_area_body_exited"]
